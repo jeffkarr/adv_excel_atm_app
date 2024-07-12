@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './App.css';
 import { Grid } from '@mui/material';
 import { SignIn } from './components/SignIn';
-import { Alert } from './components/Alert';
+import { UseAlert } from './components/UseAlert';
 import { AccountDashboard } from './components/AccountDashboard';
 import { account } from './Types/Account';
 
