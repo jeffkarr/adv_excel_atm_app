@@ -19,7 +19,20 @@ export const withdrawal = async (accountID: string, amount: number) => {
 }
 
 export const deposit = async (accountID: string, amount: number) => {
+  console.log('--- entering deposit function ---');
+  
   const account = await getAccount(accountID);
+  console.dir(account, {depth:null, colors:true});
+
+  if (account && amount > 1000.00) {
+    throw new Error("Your deposit amount exceeds the transaction limit of $1000");
+  }
+  if (account && account.hasOwnProperty('type') && account.type === 'credit' && 
+      account.hasOwnProperty('amount') ) {
+    if (amount > account.amount) {
+      throw new Error("Credit account deposits cannot exceed your account value");
+    }
+  }
   account.amount += amount;
   const res = await query(`
     UPDATE accounts
