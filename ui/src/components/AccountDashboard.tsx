@@ -23,6 +23,8 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
     }
     const response = await fetch(`http://localhost:3000/transactions/${account.accountNumber}/deposit`, requestOptions);
     const data = await response.json();
+    console.dir(data, {depth:null, colors:true});
+
     setAccount({
       accountNumber: data.account_number,
       name: data.name,
