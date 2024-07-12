@@ -27,22 +27,23 @@ export const deposit = async (accountID: string, amount: number) => {
   if (account && amount > 1000.00) {
     throw new Error("Your deposit amount exceeds the transaction limit of $1000");
   }
-  if (account && account.hasOwnProperty('type') && account.type === 'credit' && 
+  else if (account && account.hasOwnProperty('type') && account.type === 'credit' && 
       account.hasOwnProperty('amount') ) {
     if (amount > account.amount) {
       throw new Error("Credit account deposits cannot exceed your account value");
     }
-  }
-  account.amount += amount;
-  const res = await query(`
-    UPDATE accounts
-    SET amount = $1 
-    WHERE account_number = $2`,
-    [account.amount, accountID]
-  );
-
-  if (res.rowCount === 0) {
-    throw new Error("Transaction failed");
+  } else {
+    account.amount += amount;
+    const res = await query(`
+      UPDATE accounts
+      SET amount = $1 
+      WHERE account_number = $2`,
+      [account.amount, accountID]
+    );
+  
+    if (res.rowCount === 0) {
+      throw new Error("Transaction failed");
+    }
   }
 
   return account;
