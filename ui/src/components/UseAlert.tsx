@@ -1,4 +1,3 @@
-import React, { useState } from "react"
 import { Stack, Alert } from "@mui/material"
 
 type UseAlertProps = {
@@ -9,7 +8,7 @@ type UseAlertProps = {
 export const UseAlert = ( props: UseAlertProps) => {
     return (
         <Stack spacing={2}>
-            <Alert severity='warning'>Test Alert Message</Alert>
+            <Alert severity={props.severity}>{props.message}</Alert>
         </Stack>
     )
 }
