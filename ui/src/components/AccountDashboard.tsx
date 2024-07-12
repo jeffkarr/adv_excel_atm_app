@@ -69,7 +69,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         <Grid item xs={6}>
           <Card className="deposit-card">
             <CardContent>
-              { useAlert && (<UseAlert message={account.restricted} />) }
+              { useAlert && (<UseAlert severity={"danger"} message={account.restricted} />) }
               <h3>Deposit</h3>
               <TextField 
                 label="Deposit Amount" 
