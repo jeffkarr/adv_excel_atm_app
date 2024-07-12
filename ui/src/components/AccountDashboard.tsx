@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import {account} from "../Types/Account"
 import Paper from "@mui/material/Paper/Paper";
 import { Button, Card, CardContent, Grid, TextField } from "@mui/material";
+import { Alert } from "../components/Alert";
 
 type AccountDashboardProps = {
   account: account;
@@ -62,6 +63,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         <Grid item xs={6}>
           <Card className="deposit-card">
             <CardContent>
+              <Alert></Alert>
               <h3>Deposit</h3>
               <TextField 
                 label="Deposit Amount" 
