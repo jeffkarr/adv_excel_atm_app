@@ -4,5 +4,4 @@ export type account = {
   amount: number;
   type: string;
   creditLimit: number;
-  restricted: string;
 }
