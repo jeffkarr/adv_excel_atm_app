@@ -26,14 +26,14 @@ export const deposit = async (accountID: string, amount: number) => {
 
   if (account && amount > 1000.00) {
     console.log('--- 1 ---');
-    throw new Error("Your deposit amount exceeds the transaction limit of $1000");
+    account.restricted = "Your deposit amount exceeds the transaction limit of $1000";
   }
   else if (account && account.hasOwnProperty('type') && account.type === 'credit' && 
       account.hasOwnProperty('amount') ) {
         console.log('--- 2 ---');
     if (amount > account.amount) { 
       console.log('--- 3 ---');
-      throw new Error("Credit account deposits cannot exceed your account value");
+      account.restricted = "Credit account deposits cannot exceed your account value";
     }
   } else { 
     console.log('--- 4 ---');
