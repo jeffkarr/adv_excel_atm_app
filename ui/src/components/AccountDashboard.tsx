@@ -12,6 +12,7 @@ type AccountDashboardProps = {
 export const AccountDashboard = (props: AccountDashboardProps) => {
   const [depositAmount, setDepositAmount] = useState(0);
   const [withdrawAmount, setWithdrawAmount] = useState(0);
+  const [useAlert, setUseAlert] = useState(false);
   const [account, setAccount] = useState(props.account); 
 
   const {signOut} = props;
@@ -26,6 +27,11 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
     const data = await response.json();
     console.dir(data, {depth:null, colors:true});
 
+    if (data && data.hasOwnProperty('restricted') ){
+      console.log('--- data.restricted ---');
+      console.log(data.restricted);
+      setUseAlert(true);
+    }
     setAccount({
       accountNumber: data.account_number,
       name: data.name,
@@ -63,7 +69,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         <Grid item xs={6}>
           <Card className="deposit-card">
             <CardContent>
-              <UseAlert />
+              { useAlert && (<UseAlert message={account.restricted} />) }
               <h3>Deposit</h3>
               <TextField 
                 label="Deposit Amount" 
