@@ -13,7 +13,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
   const [depositAmount, setDepositAmount] = useState(0);
   const [withdrawAmount, setWithdrawAmount] = useState(0);
   const [useAlert, setUseAlert] = useState(false);
-  const [useAlertSeverity, setUseAlertSeverity] = useState('danger');
+ // const [useAlertSeverity, setUseAlertSeverity] = useState('danger');
   const [useAlertMessage, setUseAlertMessage] = useState('');
   const [account, setAccount] = useState(props.account); 
 
@@ -74,7 +74,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         <Grid item xs={6}>
           <Card className="deposit-card">
             <CardContent>
-              { useAlert && (<UseAlert severity={useAlertSeverity} message={useAlertMessage} />) }
+              { useAlert && (<UseAlert message={useAlertMessage} />) }
               <h3>Deposit</h3>
               <TextField 
                 label="Deposit Amount" 
