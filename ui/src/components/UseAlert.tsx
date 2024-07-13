@@ -6,9 +6,9 @@ type UseAlertProps = {
     message: string;
 }
 
-export const UseAlert = ( props: UseAlertProps) => {
-    const [alertSeverity, setAlertSeverity] = useState(props.severity); 
+export const UseAlert = ( props: UseAlertProps) => {   
     const [alertMessage, setAlertMessage] = useState(props.message); 
+    const alertSeverity = props.severity ?? 'danger'; 
     return (
         <Stack spacing={2}>
             <Alert severity={alertSeverity}>{alertMessage}</Alert>
