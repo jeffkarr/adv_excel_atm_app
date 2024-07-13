@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Stack, Alert } from "@mui/material";
+import type { Color } from '@material-ui/lab/Alert'
 
 interface UseAlertProps {
-    severity: string;
+    severity: Color;
     message: string;
 }
 
