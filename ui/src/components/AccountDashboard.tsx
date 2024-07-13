@@ -34,6 +34,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
       
       setUseAlert(true);
       setUseAlertMessage(data.restricted ? data.restricted : '');
+      setDepositAmount(0);
     }
     setAccount({
       accountNumber: data.account_number,
@@ -73,7 +74,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
           <Card className="deposit-card">
             <CardContent>
 
-              { useAlert && <Alert title="" description={useAlertMessage} severity="error" /> }
+              { useAlert && <Alert title="Deposit Failed" description={useAlertMessage} severity="error" /> }
 
               <h3>Deposit</h3>
               <TextField 
