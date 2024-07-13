@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import {account} from "../Types/Account"
 import Paper from "@mui/material/Paper/Paper";
 import { Button, Card, CardContent, Grid, TextField } from "@mui/material";
-import { UseAlert } from "../components/UseAlert";
+import Alert from "../components/Alert/Alert";
 
 type AccountDashboardProps = {
   account: account;
@@ -13,7 +13,6 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
   const [depositAmount, setDepositAmount] = useState(0);
   const [withdrawAmount, setWithdrawAmount] = useState(0);
   const [useAlert, setUseAlert] = useState(false);
-  const [useAlertSeverity, setUseAlertSeverity] = useState('error');
   const [useAlertMessage, setUseAlertMessage] = useState('');
   const [account, setAccount] = useState(props.account); 
 
@@ -34,7 +33,6 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
       console.log(data.restricted);
       
       setUseAlert(true);
-      setUseAlertSeverity('error');
       setUseAlertMessage(data.restricted ? data.restricted : '');
     }
     setAccount({
@@ -74,7 +72,9 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         <Grid item xs={6}>
           <Card className="deposit-card">
             <CardContent>
-              { useAlert && (<UseAlert severity={useAlertSeverity} message={useAlertMessage} />) }
+
+              { useAlert && (<Alert title=null description={useAlertMessage} severity="error" /> }
+
               <h3>Deposit</h3>
               <TextField 
                 label="Deposit Amount" 
