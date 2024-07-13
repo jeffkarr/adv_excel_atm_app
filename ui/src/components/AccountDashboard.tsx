@@ -73,7 +73,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
           <Card className="deposit-card">
             <CardContent>
 
-              { useAlert && <Alert title=null description={useAlertMessage} severity="error"></Alert> }
+              { useAlert && <Alert title="Alert" description={useAlertMessage} severity="error" /> }
 
               <h3>Deposit</h3>
               <TextField 
