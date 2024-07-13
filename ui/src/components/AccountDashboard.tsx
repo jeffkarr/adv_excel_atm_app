@@ -34,12 +34,11 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
       
       setUseAlert(true);
       setUseAlertMessage(data.restricted ? data.restricted : '');
-      setDepositAmount(0);
     }
     setAccount({
       accountNumber: data.account_number,
       name: data.name,
-      amount: data.amount,
+      amount: useAlert ? data.amount : 0,
       type: data.type,
       creditLimit: data.credit_limit
     });
