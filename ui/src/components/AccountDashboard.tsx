@@ -38,7 +38,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
     setAccount({
       accountNumber: data.account_number,
       name: data.name,
-      amount: useAlert ? data.amount : 0,
+      amount: data.amount,
       type: data.type,
       creditLimit: data.credit_limit
     });
@@ -72,20 +72,33 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         <Grid item xs={6}>
           <Card className="deposit-card">
             <CardContent>
-
-              { useAlert && <Alert title="Deposit Failed" description={useAlertMessage} severity="error" /> }
-
-              <h3>Deposit</h3>
-              <TextField 
-                label="Deposit Amount" 
-                variant="outlined" 
-                type="number"
-                sx={{
-                  display: 'flex',
-                  margin: 'auto',
-                }}
-                onChange={(e) => setDepositAmount(+e.target.value)}
-              />
+              { useAlert && 
+                <Alert title="Deposit Failed" description={useAlertMessage} severity="error" /> 
+                <h3>Deposit</h3>
+                <TextField 
+                  label="Deposit Amount" 
+                  variant="outlined" 
+                  type="number"
+                  sx={{
+                    display: 'flex',
+                    margin: 'auto',
+                  }}
+                  onChange={(e) => setDepositAmount(0)}
+                />
+              }
+              { !useAlert && 
+                <h3>Deposit</h3>
+                <TextField 
+                  label="Deposit Amount" 
+                  variant="outlined" 
+                  type="number"
+                  sx={{
+                    display: 'flex',
+                    margin: 'auto',
+                  }}
+                  onChange={(e) => setDepositAmount(+e.target.value)}
+                />
+              }
               <Button 
                 variant="contained" 
                 sx={{
