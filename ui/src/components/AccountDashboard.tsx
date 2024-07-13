@@ -34,6 +34,11 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
       
       setUseAlert(true);
       setUseAlertMessage(data.restricted ? data.restricted : '');
+      setTimeout(() => {
+        setUseAlert(false);
+        setUseAlertMessage('');
+        setDepositAmount(0);
+      }, 3000)
     }
     setAccount({
       accountNumber: data.account_number,
