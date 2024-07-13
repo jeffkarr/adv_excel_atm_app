@@ -84,7 +84,14 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
                   display: 'flex',
                   margin: 'auto',
                 }}
-                onChange={ (e) => setDepositAmount(useAlert ? +0 : +e.target.value) }
+                onChange={ (e) => {
+                    if (useAlert) {
+                      setDepositAmount(0)
+                    } else {
+                      setDepositAmount(+e.target.value) 
+                    }
+                  }
+                }
               />
               <Button 
                 variant="contained" 
