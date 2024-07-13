@@ -34,7 +34,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
       console.log(data.restricted);
       
       setUseAlert(true);
-      setUseAlertSeverity('danger');
+ //     setUseAlertSeverity('danger');
       setUseAlertMessage(data.restricted ? data.restricted : '');
     }
     setAccount({
