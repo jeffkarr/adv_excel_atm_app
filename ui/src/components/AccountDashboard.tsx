@@ -13,7 +13,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
   const [depositAmount, setDepositAmount] = useState(0);
   const [withdrawAmount, setWithdrawAmount] = useState(0);
   const [useAlert, setUseAlert] = useState(false);
-  const [useAlertSeverity, setUseAlertSeverity] = useState('');
+  const [useAlertSeverity, setUseAlertSeverity] = useState('danger');
   const [useAlertMessage, setUseAlertMessage] = useState('');
   const [account, setAccount] = useState(props.account); 
 
