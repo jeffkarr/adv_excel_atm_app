@@ -8,13 +8,13 @@ type UseAlertProps = {
 
 export const UseAlert = ( props: UseAlertProps) => {   
     const [alertMessage, setAlertMessage] = useState(props.message); 
-    const [alertSeverity, setAlertSeverity] = useState(props.message);
+    const [alertSeverity, setAlertSeverity] = useState(props.severity);
     if (!alertSeverity) {
         setAlertSeverity('error');
     }   
     return (
         <Stack spacing={2}>
-            <Alert severity={alertSeverity}>{alertMessage}</Alert>
+            <Alert severity={alertSeverity} >{alertMessage}</Alert>
         </Stack>
     )
 }
