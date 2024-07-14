@@ -74,8 +74,15 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         setWithdrawAmount(+0.00);
       }, 5000) 
     }  
-    else if () {
-
+    else if ( withdrawAmount < 5 ) {
+      setWithdrawAlert(true);
+      setAlertMessage('Withdrawal amount is less than the $5 minimum. Only whole dollar amounts that are specified in $5 increments are accepted.');
+      setTimeout(() => {
+        setWithdrawAlert(false);
+        setAlertMessage('');
+        setWithdrawAmount(+0.00);
+      }, 5000) 
+    }  
 
     } else {
       const requestOptions = {
