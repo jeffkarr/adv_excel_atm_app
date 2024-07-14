@@ -12,7 +12,8 @@ type AccountDashboardProps = {
 export const AccountDashboard = (props: AccountDashboardProps) => {
   const [depositAmount, setDepositAmount] = useState(0);
   const [withdrawAmount, setWithdrawAmount] = useState(0);
-  const [useAlert, setUseAlert] = useState(false);
+  const [useDepositAlert, setDepositAlert] = useState(false);
+  const [useWithdrawAlert, setWithdrawAlert] = useState(false);
   const [useAlertMessage, setUseAlertMessage] = useState('');
   const [account, setAccount] = useState(props.account); 
 
@@ -23,10 +24,10 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
     const depositIsInteger = Number.isInteger(depositAmount);
   
     if (!depositIsInteger) {
-      setUseAlert(true);
+      setDepositAlert(true);
       setUseAlertMessage('Only whole dollar amounts are accepted for deposit transactions.');
       setTimeout(() => {
-        setUseAlert(false);
+        setDepositAlert(false);
         setUseAlertMessage('');
         setDepositAmount(+0.00);
       }, 5000) 
@@ -41,11 +42,11 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
 
       const data = await response.json();
   
-      if (data && data.hasOwnProperty('restricted') ){
-        setUseAlert(true);
+      if (data && data.hasOwnProperty('depositRestricted') ){
+        setDepositAlert(true);
         setUseAlertMessage(data.restricted ? data.restricted : '');
         setTimeout(() => {
-          setUseAlert(false);
+          setDepositAlert(false);
           setUseAlertMessage('');
           setDepositAmount(+0.00);
         }, 5000)
@@ -65,12 +66,12 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
     const withdrawIsInteger = Number.isInteger(withdrawAmount);
 
     if (!withdrawIsInteger) {
-      setUseAlert(true);
+      setWithdrawAlert(true);
       setUseAlertMessage('Only whole dollar amounts that are specified in $5 increments are accepted for withdrawal transactions.');
       setTimeout(() => {
-        setUseAlert(false);
+        setWithdrawAlert(false);
         setUseAlertMessage('');
-        setDepositAmount(+0.00);
+        setWithdrawAmount(+0.00);
       }, 5000) 
 
     } else {
@@ -83,13 +84,13 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
       
       const data = await response.json();
 
-      if (data && data.hasOwnProperty('restricted') ){
-        setUseAlert(true);
+      if (data && data.hasOwnProperty('withdrawRestricted') ){
+        setWithdrawAlert(true);
         setUseAlertMessage(data.restricted ? data.restricted : '');
         setTimeout(() => {
-          setUseAlert(false);
+          setWithdrawAlert(false);
           setUseAlertMessage('');
-          setDepositAmount(+0.00);
+          setWithdrawAmount(+0.00);
         }, 5000)
       }
       setAccount({
@@ -113,7 +114,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         <Grid item xs={6}>
           <Card className="deposit-card">
             <CardContent>
-              { useAlert ? 
+              { useDepositAlert ? 
                 <>
                   <Alert title="Deposit Failed" description={useAlertMessage} severity="error" /> 
                   <h3>Deposit</h3>
@@ -159,7 +160,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         <Grid item xs={6}>
           <Card className="withdraw-card">
             <CardContent>
-              { useAlert ? 
+              { useWithdrawAlert ? 
                 <>
                   <Alert title="Withdrawal Failed" description={useAlertMessage} severity="error" /> 
                   <h3>Withdraw</h3>
@@ -171,7 +172,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
                       display: 'flex',
                       margin: 'auto',
                     }}
-                    onChange={(e) => setWithdrawAmount(+e.target.value)}
+                    onChange={(e) => setWithdrawAmount(+0)}
                   />
                 </>
               :
