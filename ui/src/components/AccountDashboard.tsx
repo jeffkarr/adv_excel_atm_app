@@ -10,14 +10,11 @@ type AccountDashboardProps = {
 }
 
 export const AccountDashboard = (props: AccountDashboardProps) => {
-  const [depositAmount, setDepositAmount] = useState(0.0);
-  const [withdrawAmount, setWithdrawAmount] = useState(0.0);
+  const [depositAmount, setDepositAmount] = useState(0);
+  const [withdrawAmount, setWithdrawAmount] = useState(0);
   const [useAlert, setUseAlert] = useState(false);
   const [useAlertMessage, setUseAlertMessage] = useState('');
   const [account, setAccount] = useState(props.account); 
-  
-  const tempAmt  = Math.round(depositAmount * 100) / 100;
-  setDepositAmount(+tempAmt);
 
   const {signOut} = props;
 
@@ -89,7 +86,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
                       display: 'flex',
                       margin: 'auto',
                     }}
-                    onChange={ (e) => setDepositAmount(+0.00) }
+                    onChange={ (e) => setDepositAmount(+0) }
                   />
                 </>
               : 

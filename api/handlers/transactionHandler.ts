@@ -24,6 +24,8 @@ export const deposit = async (accountID: string, amount: number) => {
   const account = await getAccount(accountID);
   console.dir(account, {depth:null, colors:true});
 
+  console.log(`--- amount ${amount}`);
+
   if (account && amount > 1000.00) {
     console.log('--- 1 ---');
     account.restricted = "Your deposit amount exceeds the limit of $1000. Please resubmit a deposit that is below this limit.";
