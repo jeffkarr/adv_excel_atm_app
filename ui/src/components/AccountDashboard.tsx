@@ -82,8 +82,6 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         setAlertMessage('');
         setWithdrawAmount(+0.00);
       }, 5000) 
-    }  
-
     } else {
       const requestOptions = {
         method: 'PUT',
