@@ -18,6 +18,13 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
 
   const {signOut} = props;
 
+  console.log(`--- depositAmount ${depositAmount}`);
+
+  if (depositAmount < 0 ) {
+    const tempAmt  = Math.round(depositAmount * 100) / 100;
+    setDepositAmount(+tempAmt);
+  }
+  
   const depositFunds = async () => {
     const requestOptions = {
       method: 'PUT',
