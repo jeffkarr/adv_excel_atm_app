@@ -61,20 +61,45 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
   }
 
   const withdrawFunds = async () => {
-    const requestOptions = {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({amount: withdrawAmount})
+
+    const withdrawIsInteger = Number.isInteger(withdrawAmount);
+
+    if (!withdrawIsInteger) {
+      setUseAlert(true);
+      setUseAlertMessage('Only whole dollar amounts that are specified in $5 increments are accepted for withdrawal transactions.');
+      setTimeout(() => {
+        setUseAlert(false);
+        setUseAlertMessage('');
+        setDepositAmount(+0.00);
+      }, 5000) 
+
+    } else {
+      const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({amount: withdrawAmount})
+      }
+      const response = await fetch(`http://localhost:3000/transactions/${account.accountNumber}/withdraw`, requestOptions);
+      
+      const data = await response.json();
+
+      if (data && data.hasOwnProperty('restricted') ){
+        setUseAlert(true);
+        setUseAlertMessage(data.restricted ? data.restricted : '');
+        setTimeout(() => {
+          setUseAlert(false);
+          setUseAlertMessage('');
+          setDepositAmount(+0.00);
+        }, 5000)
+      }
+      setAccount({
+        accountNumber: data.account_number,
+        name: data.name,
+        amount: data.amount,
+        type: data.type,
+        creditLimit: data.credit_limit
+      });
     }
-    const response = await fetch(`http://localhost:3000/transactions/${account.accountNumber}/withdraw`, requestOptions);
-    const data = await response.json();
-    setAccount({
-      accountNumber: data.account_number,
-      name: data.name,
-      amount: data.amount,
-      type: data.type,
-      creditLimit: data.credit_limit
-    });
   }
 
   return (
