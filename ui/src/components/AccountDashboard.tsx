@@ -29,9 +29,6 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
     console.dir(data, {depth:null, colors:true});
 
     if (data && data.hasOwnProperty('restricted') ){
-      console.log('--- data.restricted ---');
-      console.log(data.restricted);
-      
       setUseAlert(true);
       setUseAlertMessage(data.restricted ? data.restricted : '');
       setTimeout(() => {

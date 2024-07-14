@@ -35,10 +35,22 @@ export const deposit = async (accountID: string, amount: number) => {
     account.restricted = "Your deposit amount exceeds the limit of $1000. Please resubmit a deposit that is below this limit.";
   }
   else if (account && account.hasOwnProperty('type') && account.type === 'credit' && account.hasOwnProperty('amount') ) {
-        console.log('--- 2 ---');
+      console.log('--- 2 ---');
     if (amount > account.amount) { 
-      console.log('--- 3 ---');
+      console.log('--- 3 a ---');
       account.restricted = "Deposits for credit accounts cannot exceed your account balance. Please resubmit a deposit that is below this limit.";
+    } else {
+      console.log('--- 3 b ---');
+      account.amount += amount;
+      const res = await query(`
+        UPDATE accounts
+        SET amount = $1 
+        WHERE account_number = $2`,
+        [account.amount, accountID]
+      );
+      if (res.rowCount === 0) {
+        throw new Error("Transaction failed");
+      }
     }
   } else { 
     console.log('--- 4 ---');
