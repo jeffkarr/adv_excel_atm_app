@@ -30,8 +30,8 @@ export const deposit = async (accountID: string, amount: number) => {
   }
   else if (account && account.hasOwnProperty('type') && account.type === 'credit' && account.hasOwnProperty('amount') ) {
       console.log('--- 2 ---');
-    // how much will it take to zero out this credit account balance?
-    if ( account.amount < 0 ) {
+    if ( account.amount <= 0 ) {
+      // how much will it take to zero out this credit account balance?
       const amtNeededToZeroAcct = Math.abs(account.amount);
       if (amount > amtNeededToZeroAcct) {
         console.log('--- 3 a ---');
