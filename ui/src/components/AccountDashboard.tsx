@@ -38,7 +38,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         setUseAlert(false);
         setUseAlertMessage('');
         setDepositAmount(0);
-      }, 3000)
+      }, 5000)
     }
     setAccount({
       accountNumber: data.account_number,
@@ -90,6 +90,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
                   margin: 'auto',
                 }}
                 onChange={ (e) => {
+                  console.log(`--- inside deposit onchange function  useAlert ${useAlert} ---`);
                     if (useAlert) {
                       setDepositAmount(0)
                     } else {
