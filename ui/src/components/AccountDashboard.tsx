@@ -37,7 +37,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
       setTimeout(() => {
         setUseAlert(false);
         setUseAlertMessage('');
-        setDepositAmount(0);
+        setDepositAmount(+0);
       }, 5000)
     }
     setAccount({
@@ -89,15 +89,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
                   display: 'flex',
                   margin: 'auto',
                 }}
-                onChange={ (e) => {
-                  console.log(`--- inside deposit onchange function  useAlert ${useAlert} ---`);
-                    if (useAlert) {
-                      setDepositAmount(0)
-                    } else {
-                      setDepositAmount(+e.target.value) 
-                    }
-                  }
-                }
+                onChange={ (e) => setDepositAmount(+e.target.value) }
               />
               <Button 
                 variant="contained" 
