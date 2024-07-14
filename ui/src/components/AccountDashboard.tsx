@@ -125,7 +125,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
                   margin: 'auto', 
                   marginTop: 2}}
                 onClick={depositFunds}
-              >
+                >
                 Submit
               </Button>
             </CardContent>
@@ -134,17 +134,36 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         <Grid item xs={6}>
           <Card className="withdraw-card">
             <CardContent>
-              <h3>Withdraw</h3>
-              <TextField 
-                label="Withdraw Amount" 
-                variant="outlined" 
-                type="number" 
-                sx={{
-                  display: 'flex',
-                  margin: 'auto',
-                }}
-                onChange={(e) => setWithdrawAmount(+e.target.value)}
-              />
+              { useAlert ? 
+                <>
+                  <Alert title="Withdrawal Failed" description={useAlertMessage} severity="error" /> 
+                  <h3>Withdraw</h3>
+                  <TextField 
+                    label="Withdraw Amount" 
+                    variant="outlined" 
+                    type="number" 
+                    sx={{
+                      display: 'flex',
+                      margin: 'auto',
+                    }}
+                    onChange={(e) => setWithdrawAmount(+e.target.value)}
+                  />
+                </>
+              :
+                <>
+                  <h3>Withdraw</h3>
+                  <TextField 
+                    label="Withdraw Amount" 
+                    variant="outlined" 
+                    type="number" 
+                    sx={{
+                      display: 'flex',
+                      margin: 'auto',
+                    }}
+                    onChange={(e) => setWithdrawAmount(+e.target.value)}
+                  />
+                </>
+              }
               <Button 
                 variant="contained" 
                 sx={{
@@ -155,7 +174,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
                 onClick={withdrawFunds}
                 >
                   Submit
-                </Button>
+              </Button>
             </CardContent>
           </Card>
         </Grid>

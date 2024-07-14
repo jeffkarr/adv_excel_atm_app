@@ -2,17 +2,28 @@ import { query } from "../utils/db";
 import { getAccount } from "./accountHandler";
 
 export const withdrawal = async (accountID: string, amount: number) => {
+  
   const account = await getAccount(accountID);
-  account.amount -= amount;
-  const res = await query(`
-    UPDATE accounts
-    SET amount = $1 
-    WHERE account_number = $2`,
-    [account.amount, accountID]
-  );
+  
+  if (amount <= 5 ) {
+    account.restricted = "Minimum withdrawal amount is $5. Please resubmit withdrawal request with a valid dollar amount.";
+  }
+  if (account && amount > 200.00) {
+    account.restricted = "There is a transaction limit of $200 for withdrawals. Please resubmit a withdrawal that is below this limit.";
+  }
 
-  if (res.rowCount === 0) {
-    throw new Error("Transaction failed");
+  if ( !account.hasOwnProperty('restricted') ) {
+    account.amount -= amount;
+    const res = await query(`
+      UPDATE accounts
+      SET amount = $1 
+      WHERE account_number = $2`,
+      [account.amount, accountID]
+    );
+
+    if (res.rowCount === 0) {
+      throw new Error("Transaction failed");
+    }
   }
   return account;
 }
