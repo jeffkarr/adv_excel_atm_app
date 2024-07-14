@@ -5,10 +5,10 @@ export const withdrawal = async (accountID: string, amount: number) => {
   
   const account = await getAccount(accountID);
   
-  if (amount <= 5 ) {
-    account.withdrawRestricted = "Minimum withdrawal amount is $5. Please resubmit withdrawal request with a valid dollar amount.";
+  if (amount < 5 ) {
+    account.withdrawRestricted = "The minimum withdrawal amount is $5. Please resubmit withdrawal request with a valid minimum dollar amount.";
   }
-  if (account && amount > 200.00) {
+  if (account && amount > 200) {
     account.withdrawRestricted = "There is a transaction limit of $200 for withdrawals. Please resubmit a withdrawal that is below this limit.";
   }
 

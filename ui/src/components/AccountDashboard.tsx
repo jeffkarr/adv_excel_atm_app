@@ -14,7 +14,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
   const [withdrawAmount, setWithdrawAmount] = useState(0);
   const [useDepositAlert, setDepositAlert] = useState(false);
   const [useWithdrawAlert, setWithdrawAlert] = useState(false);
-  const [useAlertMessage, setUseAlertMessage] = useState('');
+  const [useAlertMessage, setAlertMessage] = useState('');
   const [account, setAccount] = useState(props.account); 
 
   const {signOut} = props;
@@ -25,10 +25,10 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
   
     if (!depositIsInteger) {
       setDepositAlert(true);
-      setUseAlertMessage('Only whole dollar amounts are accepted for deposit transactions.');
+      setAlertMessage('Only whole dollar amounts are accepted for deposit transactions.');
       setTimeout(() => {
         setDepositAlert(false);
-        setUseAlertMessage('');
+        setAlertMessage('');
         setDepositAmount(+0.00);
       }, 5000) 
 
@@ -44,10 +44,10 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
   
       if (data && data.hasOwnProperty('depositRestricted') ){
         setDepositAlert(true);
-        setUseAlertMessage(data.restricted ? data.restricted : '');
+        setAlertMessage(data.depositRestricted ? data.depositRestricted : '');
         setTimeout(() => {
           setDepositAlert(false);
-          setUseAlertMessage('');
+          setAlertMessage('');
           setDepositAmount(+0.00);
         }, 5000)
       }
@@ -67,12 +67,15 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
 
     if (!withdrawIsInteger) {
       setWithdrawAlert(true);
-      setUseAlertMessage('Only whole dollar amounts that are specified in $5 increments are accepted for withdrawal transactions.');
+      setAlertMessage('Only whole dollar amounts that are specified in $5 increments are accepted for withdrawal transactions.');
       setTimeout(() => {
         setWithdrawAlert(false);
-        setUseAlertMessage('');
+        setAlertMessage('');
         setWithdrawAmount(+0.00);
       }, 5000) 
+    }  
+    else if () {
+
 
     } else {
       const requestOptions = {
@@ -86,10 +89,10 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
 
       if (data && data.hasOwnProperty('withdrawRestricted') ){
         setWithdrawAlert(true);
-        setUseAlertMessage(data.restricted ? data.restricted : '');
+        setAlertMessage(data.withdrawRestricted ? data.withdrawRestricted : '');
         setTimeout(() => {
           setWithdrawAlert(false);
-          setUseAlertMessage('');
+          setAlertMessage('');
           setWithdrawAmount(+0.00);
         }, 5000)
       }
