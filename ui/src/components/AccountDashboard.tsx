@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import {account} from "../Types/Account"
 import Paper from "@mui/material/Paper/Paper";
 import { Button, Card, CardContent, Grid, TextField } from "@mui/material";
+import Alert from "../components/Alert/Alert";
 
 type AccountDashboardProps = {
   account: account;
@@ -11,25 +12,52 @@ type AccountDashboardProps = {
 export const AccountDashboard = (props: AccountDashboardProps) => {
   const [depositAmount, setDepositAmount] = useState(0);
   const [withdrawAmount, setWithdrawAmount] = useState(0);
+  const [useAlert, setUseAlert] = useState(false);
+  const [useAlertMessage, setUseAlertMessage] = useState('');
   const [account, setAccount] = useState(props.account); 
 
   const {signOut} = props;
 
   const depositFunds = async () => {
-    const requestOptions = {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({amount: depositAmount})
+
+    const depositIsInteger = Number.isInteger(depositAmount);
+  
+    if (!depositIsInteger) {
+      setUseAlert(true);
+      setUseAlertMessage('Only whole dollar amounts are accepted for deposit transactions.');
+      setTimeout(() => {
+        setUseAlert(false);
+        setUseAlertMessage('');
+        setDepositAmount(+0.00);
+      }, 5000) 
+
+    } else {
+      const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({amount: depositAmount})
+      }
+      const response = await fetch(`http://localhost:3000/transactions/${account.accountNumber}/deposit`, requestOptions);
+
+      const data = await response.json();
+  
+      if (data && data.hasOwnProperty('restricted') ){
+        setUseAlert(true);
+        setUseAlertMessage(data.restricted ? data.restricted : '');
+        setTimeout(() => {
+          setUseAlert(false);
+          setUseAlertMessage('');
+          setDepositAmount(+0.00);
+        }, 5000)
+      }
+      setAccount({
+        accountNumber: data.account_number,
+        name: data.name,
+        amount: data.amount,
+        type: data.type,
+        creditLimit: data.credit_limit
+      });
     }
-    const response = await fetch(`http://localhost:3000/transactions/${account.accountNumber}/deposit`, requestOptions);
-    const data = await response.json();
-    setAccount({
-      accountNumber: data.account_number,
-      name: data.name,
-      amount: data.amount,
-      type: data.type,
-      creditLimit: data.credit_limit
-    });
   }
 
   const withdrawFunds = async () => {
@@ -60,17 +88,36 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         <Grid item xs={6}>
           <Card className="deposit-card">
             <CardContent>
-              <h3>Deposit</h3>
-              <TextField 
-                label="Deposit Amount" 
-                variant="outlined" 
-                type="number"
-                sx={{
-                  display: 'flex',
-                  margin: 'auto',
-                }}
-                onChange={(e) => setDepositAmount(+e.target.value)}
-              />
+              { useAlert ? 
+                <>
+                  <Alert title="Deposit Failed" description={useAlertMessage} severity="error" /> 
+                  <h3>Deposit</h3>
+                  <TextField 
+                    label="Deposit Amount" 
+                    variant="outlined" 
+                    type="number"
+                    sx={{
+                      display: 'flex',
+                      margin: 'auto',
+                    }}
+                    onChange={ (e) => setDepositAmount(+0) }
+                  />
+                </>
+              : 
+                <>
+                  <h3>Deposit</h3>
+                  <TextField 
+                    label="Deposit Amount" 
+                    variant="outlined" 
+                    type="number"
+                    sx={{
+                      display: 'flex',
+                      margin: 'auto',
+                    }}
+                    onChange={ (e) => setDepositAmount(+e.target.value) }
+                  />
+                </>
+              }
               <Button 
                 variant="contained" 
                 sx={{
