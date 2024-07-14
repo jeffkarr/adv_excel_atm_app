@@ -18,13 +18,10 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
 
   const {signOut} = props;
 
-  console.log(`--- depositAmount ${depositAmount}`);
-
   const depositFunds = async () => {
 
     const depositIsInteger = Number.isInteger(depositAmount);
-    console.log(`--- depositIsInteger  ${depositIsInteger}`);
-
+  
     if (!depositIsInteger) {
       setUseAlert(true);
       setUseAlertMessage('Only whole dollar amounts are accepted for deposit transactions.');
@@ -41,8 +38,8 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         body: JSON.stringify({amount: depositAmount})
       }
       const response = await fetch(`http://localhost:3000/transactions/${account.accountNumber}/deposit`, requestOptions);
+
       const data = await response.json();
-      console.dir(data, {depth:null, colors:true});
   
       if (data && data.hasOwnProperty('restricted') ){
         setUseAlert(true);
