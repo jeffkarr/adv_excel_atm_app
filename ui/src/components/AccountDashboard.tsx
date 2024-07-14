@@ -15,7 +15,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
   const [useAlert, setUseAlert] = useState(false);
   const [useAlertMessage, setUseAlertMessage] = useState('');
   const [account, setAccount] = useState(props.account); 
-
+  
   const {signOut} = props;
 
   const depositFunds = async () => {
@@ -34,7 +34,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
       setTimeout(() => {
         setUseAlert(false);
         setUseAlertMessage('');
-        setDepositAmount(+0);
+        setDepositAmount(+0.00);
       }, 5000)
     }
     setAccount({
@@ -86,7 +86,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
                       display: 'flex',
                       margin: 'auto',
                     }}
-                    onChange={ (e) => setDepositAmount(parseFloat(+0).toFixed(2)) }
+                    onChange={ (e) => setDepositAmount(+0.00) }
                   />
                 </>
               : 
@@ -100,7 +100,11 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
                       display: 'flex',
                       margin: 'auto',
                     }}
-                    onChange={ (e) => setDepositAmount(parseFloat(+e.target.value).toFixed(2)) }
+                    onChange={ (e) => {
+                        const tempAmt  = Math.round(+e.target.value * 100) / 100;
+                        setDepositAmount(+tempAmt)
+                      }
+                    }
                   />
                 </>
               }
