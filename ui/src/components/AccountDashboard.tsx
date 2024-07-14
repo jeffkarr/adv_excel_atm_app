@@ -86,7 +86,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
                       display: 'flex',
                       margin: 'auto',
                     }}
-                    onChange={ (e) => setDepositAmount(+0) }
+                    onChange={ (e) => setDepositAmount(parseFloat(+0).toFixed(2)) }
                   />
                 </>
               : 
@@ -100,7 +100,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
                       display: 'flex',
                       margin: 'auto',
                     }}
-                    onChange={ (e) => setDepositAmount(+e.target.value) }
+                    onChange={ (e) => setDepositAmount(parseFloat(+e.target.value).toFixed(2)) }
                   />
                 </>
               }
