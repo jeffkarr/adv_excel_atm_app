@@ -20,37 +20,47 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
 
   console.log(`--- depositAmount ${depositAmount}`);
 
-  if (depositAmount < 0 ) {
-    const tempAmt  = Math.round(depositAmount * 100) / 100;
-    setDepositAmount(+tempAmt);
-  }
-  
   const depositFunds = async () => {
-    const requestOptions = {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({amount: depositAmount})
-    }
-    const response = await fetch(`http://localhost:3000/transactions/${account.accountNumber}/deposit`, requestOptions);
-    const data = await response.json();
-    console.dir(data, {depth:null, colors:true});
 
-    if (data && data.hasOwnProperty('restricted') ){
+    const depositIsInteger = Number.isInteger(depositAmount);
+    console.log(`--- depositIsInteger  ${depositIsInteger}`);
+
+    if (!depositIsInteger) {
       setUseAlert(true);
-      setUseAlertMessage(data.restricted ? data.restricted : '');
+      setUseAlertMessage('Only whole dollar amounts are accepted for deposit transactions.');
       setTimeout(() => {
         setUseAlert(false);
         setUseAlertMessage('');
         setDepositAmount(+0.00);
-      }, 5000)
+      }, 5000) 
+
+    } else {
+      const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({amount: depositAmount})
+      }
+      const response = await fetch(`http://localhost:3000/transactions/${account.accountNumber}/deposit`, requestOptions);
+      const data = await response.json();
+      console.dir(data, {depth:null, colors:true});
+  
+      if (data && data.hasOwnProperty('restricted') ){
+        setUseAlert(true);
+        setUseAlertMessage(data.restricted ? data.restricted : '');
+        setTimeout(() => {
+          setUseAlert(false);
+          setUseAlertMessage('');
+          setDepositAmount(+0.00);
+        }, 5000)
+      }
+      setAccount({
+        accountNumber: data.account_number,
+        name: data.name,
+        amount: data.amount,
+        type: data.type,
+        creditLimit: data.credit_limit
+      });
     }
-    setAccount({
-      accountNumber: data.account_number,
-      name: data.name,
-      amount: data.amount,
-      type: data.type,
-      creditLimit: data.credit_limit
-    });
   }
 
   const withdrawFunds = async () => {
