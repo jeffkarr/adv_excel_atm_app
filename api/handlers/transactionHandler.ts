@@ -25,20 +25,15 @@ export const withdrawal = async (accountID: string, amount: number) => {
   if (account && account.hasOwnProperty('type') && account.type === 'credit' && 
       account.hasOwnProperty('credit_limit') && account.credit_limit &&
       account.hasOwnProperty('amount') && account.amount ) {
-    // what is their credit limit
 
-    // what is their account balance
-      const acctAbsValue = Math.abs(account.amount);
-    // what is the withdraw amt
-      const acctTotAbsValue =  acctAbsValue + amount;
-    if (acctTotAbsValue > account.credit_limit) {
-      account.withdrawRestricted = `This credit withdrawal amount exceeds your credit limit. Please resubmit a credit withdrawal that is less than your limit.`;  
-    }  
-    
-    // is acct bal + withdraw amt > credit limit ? if so, restrict
+        const acctAbsValue = Math.abs(account.amount);
 
+        const acctTotAbsValue =  acctAbsValue + amount;
+        console.log(`--- acctAbsValue ${acctAbsValue} acctTotAbsValue ${acctTotAbsValue} account.credit_limit ${account.credit_limit}`);
 
-
+        if (acctTotAbsValue > account.credit_limit) {
+          account.withdrawRestricted = `This credit withdrawal amount exceeds your credit limit of ${account.credit_limit}. Please resubmit a withdrawal that is less than your limit.`;  
+        }  
   }
   if ( !account.hasOwnProperty('withdrawRestricted') ) {
     account.amount -= amount;
