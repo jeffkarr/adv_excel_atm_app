@@ -23,7 +23,7 @@ export const App = () => {
       
     setAccountNumberError(false);
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     setAccount({
       accountNumber: data.account_number,
       name: data.name,

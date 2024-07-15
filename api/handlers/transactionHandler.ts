@@ -52,7 +52,7 @@ export const withdrawal = async (accountID: string, amount: number) => {
       }
 
       if (account.total_withdraw_amt > 400) {
-        account.withdrawRestricted = `This withdrawal will exceed the daily withdrawal limit of $400. Your total withdrawals for today is ${account.total_withdraw_amt}.`;  
+        account.withdrawRestricted = `This withdrawal will exceed the daily withdrawal limit of $400. Your total withdrawals for today is ${account.total_withdraw_amt - amount}.`;  
       }
   }
   if ( !account.hasOwnProperty('withdrawRestricted') ) {
