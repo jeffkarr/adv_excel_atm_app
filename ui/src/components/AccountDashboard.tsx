@@ -103,9 +103,6 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
           setWithdrawAmount(+0.00);
         }, 5000)
       }
-      console.log(`--- data AFTER update ---`)
-      console.dir(data, {depth:null, colors:true});
-
       setAccount({
         accountNumber: data.account_number,
         name: data.name,

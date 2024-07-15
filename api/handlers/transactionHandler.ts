@@ -5,14 +5,13 @@ export const withdrawal = async (accountID: string, amount: number) => {
   
   const account = await getAccount(accountID);
   
-  console.log('---- account ---');
-  console.dir(account, {depth:null, colors:true});
-
   const currentDate = new Date().toISOString().slice(0, 10);
-    
-  const withdrawDate = new Date(account.withdraw_date).toISOString().slice(0, 10);
+ 
+  let withdrawDate = new Date().toISOString().slice(0, 10);
 
-  console.log(`---- currentDate ${currentDate} withdrawDate ${withdrawDate} `);
+  if (account && account.hasOwnProperty('withdraw_date') && account.withdraw_date) {
+    withdrawDate = new Date(account.withdraw_date).toISOString().slice(0, 10); 
+  }
 
   if (amount < 5 ) {
     account.withdrawRestricted = "The minimum withdrawal amount is $5. Please resubmit withdrawal request with a valid minimum dollar amount.";
@@ -51,7 +50,7 @@ export const withdrawal = async (accountID: string, amount: number) => {
       } else{
         account.total_withdraw_amt += amount;
       }
-      
+
       if (account.total_withdraw_amt > 400) {
         account.withdrawRestricted = `This withdrawal will exceed the daily withdrawal limit of $400. Your total withdrawals for today is ${account.total_withdraw_amt}.`;  
       }

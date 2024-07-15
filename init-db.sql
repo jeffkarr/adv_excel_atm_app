@@ -17,7 +17,7 @@ CHECK (type IN ('checking', 'savings', 'credit'));
 INSERT INTO accounts 
     (account_number, name, amount, type, withdraw_date, total_withdraw_amt)
 VALUES
-    (1, 'Johns Checking', 1000, 'checking', '2024-07-14', 40),
+    (1, 'Johns Checking', 1000, 'checking', CURRENT_DATE, 0),
     (2, 'Janes Savings', 2000, 'savings', CURRENT_DATE, 0),
     (4, 'Bobs Checking', 40000, 'checking', CURRENT_DATE, 0),
     (5, 'Bills Savings', 50000, 'savings', CURRENT_DATE, 0),
