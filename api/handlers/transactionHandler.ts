@@ -5,6 +5,9 @@ export const withdrawal = async (accountID: string, amount: number) => {
   
   const account = await getAccount(accountID);
   
+  console.log('---- account ---');
+  console.dir(account, {depth:null, colors:true});
+
   if (amount < 5 ) {
     account.withdrawRestricted = "The minimum withdrawal amount is $5. Please resubmit withdrawal request with a valid minimum dollar amount.";
   }

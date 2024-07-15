@@ -56,8 +56,9 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         name: data.name,
         amount: data.amount,
         type: data.type,
-        creditLimit: data.credit_limit
-      });
+        creditLimit: data.credit_limit,
+        withdraw_date: data.withdraw_date,
+        total_withdraw_amt: data.total_withdraw_amt
     }
   }
 
@@ -106,7 +107,9 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         name: data.name,
         amount: data.amount,
         type: data.type,
-        creditLimit: data.credit_limit
+        creditLimit: data.credit_limit,
+        withdraw_date: data.withdraw_date,
+        total_withdraw_amt: data.total_withdraw_amt
       });
     }
   }
