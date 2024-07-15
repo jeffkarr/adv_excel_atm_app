@@ -41,8 +41,11 @@ export const withdrawal = async (accountID: string, amount: number) => {
     account.amount -= amount;
     account.total_withdraw_amt += amount;
 
-    const currentDate = new Date().toISOString().slice(0, 10)
-    console.log(`---- currentDate ${currentDate} account.withdraw_date ${account.withdraw_date} `);
+    const currentDate = new Date().toISOString().slice(0, 10);
+    
+    const withdrawDate = new Date(account.withdraw_date).toISOString().slice(0, 10);
+
+    console.log(`---- currentDate ${currentDate} withdrawDate ${withdrawDate} `);
 
     const res = await query(`
       UPDATE accounts
