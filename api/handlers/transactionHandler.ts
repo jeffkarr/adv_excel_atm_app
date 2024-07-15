@@ -17,6 +17,29 @@ export const withdrawal = async (accountID: string, amount: number) => {
       account.withdrawRestricted = "Withdrawals are only allowed in $5 increments. Please resubmit a withdrawal using $5 increments.";  
     }
   }
+  if (account && account.hasOwnProperty('type') && account.type !== 'credit' && account.hasOwnProperty('amount') ) {
+    if (amount > account.amount) {
+      account.withdrawRestricted = `The withdrawal amount is greater than your account balance of $${account.amount}. Please resubmit a withdrawal that is less than your balance.`;  
+    }
+  }
+  if (account && account.hasOwnProperty('type') && account.type === 'credit' && 
+      account.hasOwnProperty('credit_limit') && account.credit_limit &&
+      account.hasOwnProperty('amount') && account.amount ) {
+    // what is their credit limit
+
+    // what is their account balance
+      const acctAbsValue = Math.abs(account.amount);
+    // what is the withdraw amt
+      const acctTotAbsValue =  acctAbsValue + amount;
+    if (acctTotAbsValue > account.credit_limit) {
+      account.withdrawRestricted = `This credit withdrawal amount exceeds your credit limit. Please resubmit a credit withdrawal that is less than your limit.`;  
+    }  
+    
+    // is acct bal + withdraw amt > credit limit ? if so, restrict
+
+
+
+  }
   if ( !account.hasOwnProperty('withdrawRestricted') ) {
     account.amount -= amount;
     const res = await query(`
