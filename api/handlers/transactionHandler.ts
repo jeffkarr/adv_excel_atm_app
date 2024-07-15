@@ -39,22 +39,27 @@ export const withdrawal = async (accountID: string, amount: number) => {
   }
   if ( !account.hasOwnProperty('withdrawRestricted') ) {
     account.amount -= amount;
-    account.total_withdraw_amt += amount;
-
+   
     const currentDate = new Date().toISOString().slice(0, 10);
     
     const withdrawDate = new Date(account.withdraw_date).toISOString().slice(0, 10);
 
     console.log(`---- currentDate ${currentDate} withdrawDate ${withdrawDate} `);
 
+    if (withdrawDate !== currentDate) {
+      account.total_withdraw_amt = amount;
+    } else{
+      account.total_withdraw_amt += amount;
+    }
+
     const res = await query(`
       UPDATE accounts
       SET amount = $1, 
-        total_withdraw_amt = $2
-      WHERE account_number = $3`,
-      [account.amount, account.total_withdraw_amt, accountID]
+        withdraw_date = $2,
+        total_withdraw_amt = $3
+      WHERE account_number = $4`,
+      [account.amount, currentDate, account.total_withdraw_amt, accountID]
     );
-
     if (res.rowCount === 0) {
       throw new Error("Transaction failed");
     }
