@@ -4,4 +4,6 @@ export type account = {
   amount: number;
   type: string;
   creditLimit: number;
+  withdraw_date: string;
+  total_withdraw_amt: number;
 }
