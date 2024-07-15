@@ -8,6 +8,12 @@ export const withdrawal = async (accountID: string, amount: number) => {
   console.log('---- account ---');
   console.dir(account, {depth:null, colors:true});
 
+  const currentDate = new Date().toISOString().slice(0, 10);
+    
+  const withdrawDate = new Date(account.withdraw_date).toISOString().slice(0, 10);
+
+  console.log(`---- currentDate ${currentDate} withdrawDate ${withdrawDate} `);
+
   if (amount < 5 ) {
     account.withdrawRestricted = "The minimum withdrawal amount is $5. Please resubmit withdrawal request with a valid minimum dollar amount.";
   }
@@ -34,23 +40,24 @@ export const withdrawal = async (accountID: string, amount: number) => {
         const acctTotAbsValue =  acctAbsValue + amount;
 
         if (acctTotAbsValue > account.credit_limit) {
-          account.withdrawRestricted = `This credit withdrawal amount exceeds your credit limit of ${account.credit_limit}. Please resubmit a withdrawal that is less than your limit.`;  
+          account.withdrawRestricted = `This credit withdrawal amount exceeds your credit limit of $${account.credit_limit}. Please resubmit a withdrawal that is less than your limit.`;  
         }  
+  }
+  if (account && account.hasOwnProperty('withdraw_date') && account.hasOwnProperty('total_withdraw_amt') && 
+    account.hasOwnProperty('amount') ) {
+
+      if (withdrawDate !== currentDate) {
+        account.total_withdraw_amt = amount;
+      } else{
+        account.total_withdraw_amt += amount;
+      }
+      
+      if (account.total_withdraw_amt > 400) {
+        account.withdrawRestricted = `This withdrawal will exceed the daily withdrawal limit of $400. Your total withdrawals for today is ${account.total_withdraw_amt}.`;  
+      }
   }
   if ( !account.hasOwnProperty('withdrawRestricted') ) {
     account.amount -= amount;
-   
-    const currentDate = new Date().toISOString().slice(0, 10);
-    
-    const withdrawDate = new Date(account.withdraw_date).toISOString().slice(0, 10);
-
-    console.log(`---- currentDate ${currentDate} withdrawDate ${withdrawDate} `);
-
-    if (withdrawDate !== currentDate) {
-      account.total_withdraw_amt = amount;
-    } else{
-      account.total_withdraw_amt += amount;
-    }
 
     const res = await query(`
       UPDATE accounts
