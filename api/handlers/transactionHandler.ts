@@ -32,7 +32,6 @@ export const withdrawal = async (accountID: string, amount: number) => {
         const acctAbsValue = Math.abs(account.amount);
 
         const acctTotAbsValue =  acctAbsValue + amount;
-        console.log(`--- acctAbsValue ${acctAbsValue} acctTotAbsValue ${acctTotAbsValue} account.credit_limit ${account.credit_limit}`);
 
         if (acctTotAbsValue > account.credit_limit) {
           account.withdrawRestricted = `This credit withdrawal amount exceeds your credit limit of ${account.credit_limit}. Please resubmit a withdrawal that is less than your limit.`;  
@@ -40,11 +39,17 @@ export const withdrawal = async (accountID: string, amount: number) => {
   }
   if ( !account.hasOwnProperty('withdrawRestricted') ) {
     account.amount -= amount;
+    account.total_withdraw_amt += amount;
+
+    const currentDate = new Date().toISOString().slice(0, 10)
+    console.log(`---- currentDate ${currentDate} account.withdraw_date ${account.withdraw_date} `);
+
     const res = await query(`
       UPDATE accounts
-      SET amount = $1 
-      WHERE account_number = $2`,
-      [account.amount, accountID]
+      SET amount = $1, 
+        total_withdraw_amt = $2
+      WHERE account_number = $3`,
+      [account.amount, account.total_withdraw_amt, accountID]
     );
 
     if (res.rowCount === 0) {
