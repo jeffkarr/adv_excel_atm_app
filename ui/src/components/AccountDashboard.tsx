@@ -12,8 +12,9 @@ type AccountDashboardProps = {
 export const AccountDashboard = (props: AccountDashboardProps) => {
   const [depositAmount, setDepositAmount] = useState(0);
   const [withdrawAmount, setWithdrawAmount] = useState(0);
-  const [useAlert, setUseAlert] = useState(false);
-  const [useAlertMessage, setUseAlertMessage] = useState('');
+  const [useDepositAlert, setDepositAlert] = useState(false);
+  const [useWithdrawAlert, setWithdrawAlert] = useState(false);
+  const [useAlertMessage, setAlertMessage] = useState('');
   const [account, setAccount] = useState(props.account); 
 
   const {signOut} = props;
@@ -23,11 +24,11 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
     const depositIsInteger = Number.isInteger(depositAmount);
   
     if (!depositIsInteger) {
-      setUseAlert(true);
-      setUseAlertMessage('Only whole dollar amounts are accepted for deposit transactions.');
+      setDepositAlert(true);
+      setAlertMessage('Only whole dollar amounts are accepted for deposit transactions.');
       setTimeout(() => {
-        setUseAlert(false);
-        setUseAlertMessage('');
+        setDepositAlert(false);
+        setAlertMessage('');
         setDepositAmount(+0.00);
       }, 5000) 
 
@@ -41,12 +42,12 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
 
       const data = await response.json();
   
-      if (data && data.hasOwnProperty('restricted') ){
-        setUseAlert(true);
-        setUseAlertMessage(data.restricted ? data.restricted : '');
+      if (data && data.hasOwnProperty('depositRestricted') ){
+        setDepositAlert(true);
+        setAlertMessage(data.depositRestricted ? data.depositRestricted : '');
         setTimeout(() => {
-          setUseAlert(false);
-          setUseAlertMessage('');
+          setDepositAlert(false);
+          setAlertMessage('');
           setDepositAmount(+0.00);
         }, 5000)
       }
@@ -55,26 +56,63 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         name: data.name,
         amount: data.amount,
         type: data.type,
-        creditLimit: data.credit_limit
+        creditLimit: data.credit_limit,
+        withdraw_date: data.withdraw_date,
+        total_withdraw_amt: data.total_withdraw_amt
       });
     }
   }
 
   const withdrawFunds = async () => {
-    const requestOptions = {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({amount: withdrawAmount})
+
+    const withdrawIsInteger = Number.isInteger(withdrawAmount);
+
+    if (!withdrawIsInteger) {
+      setWithdrawAlert(true);
+      setAlertMessage('Only whole dollar amounts that are specified in $5 increments are accepted for withdrawal transactions.');
+      setTimeout(() => {
+        setWithdrawAlert(false);
+        setAlertMessage('');
+        setWithdrawAmount(+0.00);
+      }, 5000) 
+    }  
+    else if ( withdrawAmount < 5 ) {
+      setWithdrawAlert(true);
+      setAlertMessage('Withdrawal amount is less than the $5 minimum. Only whole dollar amounts that are specified in $5 increments are accepted.');
+      setTimeout(() => {
+        setWithdrawAlert(false);
+        setAlertMessage('');
+        setWithdrawAmount(+0.00);
+      }, 5000) 
+    } else {
+      const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({amount: withdrawAmount})
+      }
+      const response = await fetch(`http://localhost:3000/transactions/${account.accountNumber}/withdraw`, requestOptions);
+      
+      const data = await response.json();
+
+      if (data && data.hasOwnProperty('withdrawRestricted') ){
+        setWithdrawAlert(true);
+        setAlertMessage(data.withdrawRestricted ? data.withdrawRestricted : '');
+        setTimeout(() => {
+          setWithdrawAlert(false);
+          setAlertMessage('');
+          setWithdrawAmount(+0.00);
+        }, 5000)
+      }
+      setAccount({
+        accountNumber: data.account_number,
+        name: data.name,
+        amount: data.amount,
+        type: data.type,
+        creditLimit: data.credit_limit,
+        withdraw_date: data.withdraw_date,
+        total_withdraw_amt: data.total_withdraw_amt
+      });
     }
-    const response = await fetch(`http://localhost:3000/transactions/${account.accountNumber}/withdraw`, requestOptions);
-    const data = await response.json();
-    setAccount({
-      accountNumber: data.account_number,
-      name: data.name,
-      amount: data.amount,
-      type: data.type,
-      creditLimit: data.credit_limit
-    });
   }
 
   return (
@@ -88,7 +126,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         <Grid item xs={6}>
           <Card className="deposit-card">
             <CardContent>
-              { useAlert ? 
+              { useDepositAlert ? 
                 <>
                   <Alert title="Deposit Failed" description={useAlertMessage} severity="error" /> 
                   <h3>Deposit</h3>
@@ -125,7 +163,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
                   margin: 'auto', 
                   marginTop: 2}}
                 onClick={depositFunds}
-              >
+                >
                 Submit
               </Button>
             </CardContent>
@@ -134,17 +172,36 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         <Grid item xs={6}>
           <Card className="withdraw-card">
             <CardContent>
-              <h3>Withdraw</h3>
-              <TextField 
-                label="Withdraw Amount" 
-                variant="outlined" 
-                type="number" 
-                sx={{
-                  display: 'flex',
-                  margin: 'auto',
-                }}
-                onChange={(e) => setWithdrawAmount(+e.target.value)}
-              />
+              { useWithdrawAlert ? 
+                <>
+                  <Alert title="Withdrawal Failed" description={useAlertMessage} severity="error" /> 
+                  <h3>Withdraw</h3>
+                  <TextField 
+                    label="Withdraw Amount" 
+                    variant="outlined" 
+                    type="number" 
+                    sx={{
+                      display: 'flex',
+                      margin: 'auto',
+                    }}
+                    onChange={(e) => setWithdrawAmount(+0)}
+                  />
+                </>
+              :
+                <>
+                  <h3>Withdraw</h3>
+                  <TextField 
+                    label="Withdraw Amount" 
+                    variant="outlined" 
+                    type="number" 
+                    sx={{
+                      display: 'flex',
+                      margin: 'auto',
+                    }}
+                    onChange={(e) => setWithdrawAmount(+e.target.value)}
+                  />
+                </>
+              }
               <Button 
                 variant="contained" 
                 sx={{
@@ -155,7 +212,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
                 onClick={withdrawFunds}
                 >
                   Submit
-                </Button>
+              </Button>
             </CardContent>
           </Card>
         </Grid>
