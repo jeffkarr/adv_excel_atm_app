@@ -11,7 +11,12 @@ export const withdrawal = async (accountID: string, amount: number) => {
   if (account && amount > 200) {
     account.withdrawRestricted = "There is a transaction limit of $200 for withdrawals. Please resubmit a withdrawal that is below this limit.";
   }
-
+  if (account && (amount >= 5 && amount <= 200) ) {
+    const amtInFiveDollarIncrements = Number.isInteger(amount / 5);
+    if (!amtInFiveDollarIncrements) {
+      account.withdrawRestricted = "Withdrawals are only allowed in $5 increments. Please resubmit a withdrawal using $5 increments.";  
+    }
+  }
   if ( !account.hasOwnProperty('withdrawRestricted') ) {
     account.amount -= amount;
     const res = await query(`
