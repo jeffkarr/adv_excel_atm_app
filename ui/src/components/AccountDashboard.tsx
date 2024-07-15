@@ -59,6 +59,7 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
         creditLimit: data.credit_limit,
         withdraw_date: data.withdraw_date,
         total_withdraw_amt: data.total_withdraw_amt
+      });
     }
   }
 
